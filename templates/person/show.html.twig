@@ -1,0 +1,18 @@
+{% extends "base.html.twig" %}
+
+{% block body %}
+	<div class="container">
+		<h1>{{ person.lastname }}
+			{{ person.firstname }}</h1>
+		<table class="table table-striped">
+			<tr>
+				<td>Fonction :</td>
+				<td>{{ person.functionName }}</td>
+			</tr>
+			<tr>
+				<td>Site :</td>
+				<td>{{ person.siteName }}</td>
+			</tr>
+		</table>
+	</div>
+{% endblock %}

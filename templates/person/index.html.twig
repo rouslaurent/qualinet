@@ -1,9 +1,25 @@
 {% extends "base.html.twig" %}
 {% block title 'Liste du personnel' %}
 {% block body %}
-<div class="jumbotron text-center">
-    <h1>Liste du personnel</h1>
-    <p>paragraphe</p>
-</div>
-
+	<div class="jumbotron text-center">
+		<h1>Liste du personnel</h1>
+		<p>paragraphe</p>
+	</div>
+	<div class="container">
+		<h2>Liste du personnel</h2>
+		<div class="row flex">
+			{% for person in persons %}
+				<div class="col-3">
+					<div class="card">
+						<div class="card-body">
+							<h5 class="card-title">
+								<a href="{{ path('person.show', {id: person.id, slug: person.slug})}}">{{ person.lastname }} {{ person.firstname }}</a>
+							</h5>
+                            <p class="text">Ici une description, on verra + tard</p>
+						</div>
+					</div>
+				</div>
+			{% endfor %}
+		</div>
+	</div>
 {% endblock %}
