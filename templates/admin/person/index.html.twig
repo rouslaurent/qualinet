@@ -1,0 +1,43 @@
+{% extends "base.html.twig" %}
+
+{% block title 'Gérer le personnel' %}
+
+{% block body %}
+	<div class="container">
+		<h1>Gérer le personnel</h1>
+        {% for message in app.flashes('success') %}
+            <div class="alert alert-success">
+                {{ message }}
+            </div>
+        {% endfor %}
+		<table class="table table-striped">
+			<thead>
+				<tr>
+					<th>Nom, prénom</th>
+					<th>Actions</th>
+				</tr>
+			</thead>
+			<tbody>
+				{% for person in persons %}
+					<tr>
+						<td>{{ person.lastName }}
+							{{ person.firstname }}</td>
+						<td>
+							<a href="{{ path('admin.person.edit', {id: person.id}) }}" class="btn btn-secondary">Editer</a>
+                            <form method="POST" action="{{ path('admin.person.delete', {id: person.id}) }}" 
+                            style="display:inline-block;" onsubmit="return confirm('Voulez-vous réellement supprimer cette personne ? ')">
+                                <input type="hidden" name="_method" value="DELETE">
+                                <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ person.id) }}">
+                                <button class="btn btn-danger">Supprimer</button>
+                            </form>
+						</td>
+					</tr>
+				{% endfor %}
+			</tbody>
+		</table>
+        <div class="text-right">
+            <a href="{{ path('admin.person.new') }}" class="btn btn-primary">Ajouter une personne</a>
+        </div>
+	</div>
+
+{% endblock %}

@@ -5,13 +5,13 @@ namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Cocur\Slugify\Slugify;
+use Symfony\Component\Validator\Constraints as Assert; //validation des données du formulaire
 
 /**
  * @ORM\Entity(repositoryClass=App\Repository\PersonRepository::class)
  */
 class Person
 {
-
     const FUNCTIONS = [
         0 => 'Secrétaire',
         1 => 'Commercial',

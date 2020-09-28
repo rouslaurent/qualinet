@@ -1,0 +1,8 @@
+{% extends "base.html.twig" %}
+
+{% block body %}
+	<div class="container">
+		<h2>Editer</h2>
+        {{ include('admin/person/_form.html.twig', {form: form, button:'Editer'}) }}
+	</div>
+{% endblock %}
