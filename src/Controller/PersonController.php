@@ -2,7 +2,11 @@
 namespace App\Controller;
 
 use App\Entity\Person;
+use App\Entity\PersonSearch;
+use App\Form\PersonSearchType;
 use App\Repository\PersonRepository;
+use Knp\Component\Pager\PaginatorInterface;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -25,11 +29,21 @@ class PersonController extends AbstractController {
      * @Route("/persons", name="person.index")
      */
     
-    public function index(): Response{
-        $persons = $this->repository->findAllActive();
+    public function index(PaginatorInterface $paginator, Request $request): Response{
+        $search = new PersonSearch();
+        $form = $this->createForm(PersonSearchType::class, $search);
+        $form -> handleRequest($request);
+
+        $persons = $paginator->paginate(
+            $this->repository->findAllActiveQuery($search),
+            $request->query->getInt('page', 1),
+            12
+        );
+        
         return $this->render('person/index.html.twig', [
             'current_menu' => 'persons',
-            'persons' => $persons
+            'persons' => $persons,
+            'form' => $form->createView()
         ]);
     }
     /**

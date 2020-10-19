@@ -1,0 +1,42 @@
+{% extends "base.html.twig" %}
+
+{% block title 'Gérer les fonctions' %}
+
+{% block body %}
+	<div class="container">
+		<h1>Gérer les fonctions</h1>
+        {% for message in app.flashes('success') %}
+            <div class="alert alert-success">
+                {{ message }}
+            </div>
+        {% endfor %}
+		<table class="table table-striped">
+			<thead>
+				<tr>
+					<th>Nom</th>
+					<th>Actions</th>
+				</tr>
+			</thead>
+			<tbody>
+				{% for fonction in fonctions %}
+					<tr>
+						<td>{{ fonction.name }}</td>
+						<td>
+							<a href="{{ path('admin.fonction.edit', {id: fonction.id}) }}" class="btn btn-secondary">Editer</a>
+                            <form method="POST" action="{{ path('admin.fonction.delete', {id: fonction.id}) }}" 
+                            style="display:inline-block;" onsubmit="return confirm('Voulez-vous réellement supprimer ce fonction ? ')">
+                                <input type="hidden" name="_method" value="DELETE">
+                                <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ fonction.id) }}">
+                                <button class="btn btn-danger">Supprimer</button>
+                            </form>
+						</td>
+					</tr>
+				{% endfor %}
+			</tbody>
+		</table>
+        <div class="text-right">
+            <a href="{{ path('admin.fonction.new') }}" class="btn btn-primary">Ajouter une fonction</a>
+        </div>
+	</div>
+
+{% endblock %}

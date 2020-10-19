@@ -1,25 +1,34 @@
 {% extends "base.html.twig" %}
 {% block title 'Liste du personnel' %}
 {% block body %}
-	<div class="jumbotron text-center">
-		<h1>Liste du personnel</h1>
-		<p>paragraphe</p>
+	<div class="jumbotron">
+		<div class="container">
+			{{ form_start(form) }}
+			<div class="form-row">
+				<div class="col">
+					{{ form_row(form.personName) }}
+				</div>
+				<div class="col">
+					{{ form_row(form.localisations) }}
+				</div>
+				<div class="col">
+					<button class="btn btn-primary">Rechercher</button>
+				</div>
+				{{ form_end(form) }}
+			</div>
+		</div>
 	</div>
-	<div class="container">
-		<h2>Liste du personnel</h2>
-		<div class="row flex">
+	<div class="container mt-4">
+		<h1>Liste du personnel</h1>
+		<div class="row">
 			{% for person in persons %}
-				<div class="col-3">
-					<div class="card">
-						<div class="card-body">
-							<h5 class="card-title">
-								<a href="{{ path('person.show', {id: person.id, slug: person.slug})}}">{{ person.lastname }} {{ person.firstname }}</a>
-							</h5>
-                            <p class="text">Ici une description, on verra + tard</p>
-						</div>
-					</div>
+				<div class="col-md-4">
+					{% include 'person/_person.html.twig' %}
 				</div>
 			{% endfor %}
+		</div>
+		<div class="pagination">
+			{{ knp_pagination_render(persons) }}
 		</div>
 	</div>
 {% endblock %}

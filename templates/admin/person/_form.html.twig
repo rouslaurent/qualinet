@@ -3,10 +3,6 @@
 	<div class="col-md-6">{{ form_row(form.lastname) }}</div>
 	<div class="col-md-6">{{ form_row(form.firstname) }}</div>
 </div>
-<div class="row">
-	<div class="col-md-6">{{ form_row(form.function) }}</div>
-	<div class="col-md-6">{{ form_row(form.site) }}</div>
-</div>
-{{ form_widget(form) }}
+{{ form_rest(form) }}
 <button class="btn btn-primary">{{ button|default('Enregistrer') }}</button>
 {{ form_end(form) }}

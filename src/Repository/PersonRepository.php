@@ -3,8 +3,11 @@
 namespace App\Repository;
 
 use App\Entity\Person;
-use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\Query;
+use App\Entity\PersonSearch;
+use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 
 /**
  * @method Person|null find($id, $lockMode = null, $lockVersion = null)
@@ -22,40 +25,31 @@ class PersonRepository extends ServiceEntityRepository
     /**
      * @return Person[]
      */
-    public function findAllActive()
+    public function findAllActiveQuery(PersonSearch $search): Query
     {
-        return $this->createQueryBuilder('p')
-            ->where('p.active = true')
-            ->getQuery()
-            ->getResult();
+        $query = $this->findVisibleQuery();
+
+        if($search->getPersonName()) {
+            $query = $query
+                ->andWhere('p.lastname = :personname')
+                ->setParameter('personname', $search->getPersonName());
+        }
+
+        if($search->getLocalisations()->count() > 0){
+            $k = 0;
+            foreach($search->getLocalisations() as $localisation) {
+                $k++;
+                $query = $query
+                    ->andWhere(":localisation$k MEMBER OF p.localisations")
+                    ->setParameter("localisation$k", $localisation);
+            }
+        }
+
+        return $query->getQuery();
     }
 
-    // /**
-    //  * @return Person[] Returns an array of Person objects
-    //  */
-    /*
-    public function findByExampleField($value)
-    {
+    private function findVisibleQuery() : QueryBuilder {
         return $this->createQueryBuilder('p')
-            ->andWhere('p.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('p.id', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
-        ;
+         ->where('p.active = true');
     }
-    */
-
-    /*
-    public function findOneBySomeField($value): ?Person
-    {
-        return $this->createQueryBuilder('p')
-            ->andWhere('p.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
-    }
-    */
 }

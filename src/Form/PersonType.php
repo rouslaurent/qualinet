@@ -2,9 +2,12 @@
 
 namespace App\Form;
 
+use App\Entity\Fonction;
+use App\Entity\Localisation;
 use App\Entity\Person;
+use App\Entity\Service;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -15,11 +18,20 @@ class PersonType extends AbstractType
         $builder
             ->add('lastname')
             ->add('firstname')
-            ->add('function', ChoiceType::class, [
-                'choices' => $this->getFunctionChoices('function')
+            ->add('localisations', EntityType::class, [
+                'class'=> Localisation::class,
+                'choice_label' => 'name',
+                'multiple' => true
             ])
-            ->add('site', ChoiceType::class, [
-                'choices' => $this->getFunctionChoices('site')
+            ->add('services', EntityType::class, [
+                'class'=> Service::class,
+                'choice_label' => 'name',
+                'multiple' => true
+            ])
+            ->add('fonctions', EntityType::class, [
+                'class'=> Fonction::class,
+                'choice_label' => 'name',
+                'multiple' => true
             ])
             ->add('active')
         ;
@@ -31,18 +43,5 @@ class PersonType extends AbstractType
             'data_class' => Person::class,
             'translation_domain' => 'forms'
         ]);
-    }
-
-    private function getFunctionChoices(string $field) {
-        if($field == 'function'){
-            $choices = Person::FUNCTIONS;
-        } else if ($field == 'site'){
-            $choices = Person::SITES;
-        }
-        $output = [];
-        foreach($choices as $k => $v){
-            $output[$v] = $k;
-        }
-        return $output;
     }
 }

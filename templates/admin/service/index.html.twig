@@ -1,0 +1,42 @@
+{% extends "base.html.twig" %}
+
+{% block title 'Gérer les services' %}
+
+{% block body %}
+	<div class="container">
+		<h1>Gérer les services</h1>
+        {% for message in app.flashes('success') %}
+            <div class="alert alert-success">
+                {{ message }}
+            </div>
+        {% endfor %}
+		<table class="table table-striped">
+			<thead>
+				<tr>
+					<th>Nom</th>
+					<th>Actions</th>
+				</tr>
+			</thead>
+			<tbody>
+				{% for service in services %}
+					<tr>
+						<td>{{ service.name }}</td>
+						<td>
+							<a href="{{ path('admin.service.edit', {id: service.id}) }}" class="btn btn-secondary">Editer</a>
+                            <form method="POST" action="{{ path('admin.service.delete', {id: service.id}) }}" 
+                            style="display:inline-block;" onsubmit="return confirm('Voulez-vous réellement supprimer ce service ? ')">
+                                <input type="hidden" name="_method" value="DELETE">
+                                <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ service.id) }}">
+                                <button class="btn btn-danger">Supprimer</button>
+                            </form>
+						</td>
+					</tr>
+				{% endfor %}
+			</tbody>
+		</table>
+        <div class="text-right">
+            <a href="{{ path('admin.service.new') }}" class="btn btn-primary">Ajouter un service</a>
+        </div>
+	</div>
+
+{% endblock %}

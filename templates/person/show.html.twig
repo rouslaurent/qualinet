@@ -6,12 +6,12 @@
 			{{ person.firstname }}</h1>
 		<table class="table table-striped">
 			<tr>
-				<td>Fonction :</td>
-				<td>{{ person.functionName }}</td>
-			</tr>
-			<tr>
-				<td>Site :</td>
-				<td>{{ person.siteName }}</td>
+				<td>Sites :</td>
+				<td>
+				{% for localisation in person.localisations %}
+					{{ localisation.name }} , 
+				{% endfor %}
+				</td>
 			</tr>
 		</table>
 	</div>
